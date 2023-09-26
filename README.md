@@ -14,21 +14,21 @@ Setup
 
 1.  Clone this repository to your local machine.
 
-    bashCopy code
+```bash
+    git clone <repository-url>
+```
 
-    `git clone <repository-url>`
+3.  Navigate to the directory.
 
-2.  Navigate to the directory.
+```bash
+    cd <repository-dir>
+```
 
-    bashCopy code
+4.  Configure your AWS CLI if you haven't done so.
 
-    `cd <repository-dir>`
-
-3.  Configure your AWS CLI if you haven't done so.
-
-    Copy code
-
-    `aws configure`
+```
+aws configure
+```
 
 How to Use
 ----------
@@ -40,8 +40,6 @@ How to Use
 3.  Ensure your CSV file is formatted with a column named `Supplier Item #` that contains the SKUs.
 
 4.  Run the script with:
-
-    Copy code
 
     `.\script-name.ps1`
 
