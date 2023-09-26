@@ -15,13 +15,13 @@ Setup
 1.  Clone this repository to your local machine.
 
 ```bash
-    git clone <repository-url>
+git clone <repository-url>
 ```
 
 3.  Navigate to the directory.
 
 ```bash
-    cd <repository-dir>
+cd <repository-dir>
 ```
 
 4.  Configure your AWS CLI if you haven't done so.
@@ -41,7 +41,9 @@ How to Use
 
 4.  Run the script with:
 
-    `.\script-name.ps1`
+```
+.\script-name.ps1
+```
 
 Script Content
 --------------
