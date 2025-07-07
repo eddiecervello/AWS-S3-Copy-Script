@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, refactor/high-perf-copy ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test-benchmark:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PowerShell
+        uses: PowerShell/PowerShell@v1
+      - name: Install Pester
+        run: pwsh -c 'Install-Module Pester -Force -Scope CurrentUser'
+      - name: Lint (PSScriptAnalyzer)
+        run: pwsh -c 'Install-Module PSScriptAnalyzer -Force -Scope CurrentUser; Invoke-ScriptAnalyzer -Path ./S3SkuCopy/S3SkuCopy.psm1 -Recurse -Severity Warning -EnableExit'
+      - name: Run Tests
+        run: pwsh -c 'Invoke-Pester ./S3SkuCopy/Copy-SkuFolders.Tests.ps1 -Output Detailed'
+      - name: Benchmark Parallel Copy
+        run: pwsh -c 'Import-Module ./S3SkuCopy; Measure-Command { Copy-SkuFolders -Csv ./skus.csv -Bucket s3://dummy/ -Dest ./out }'
+      - name: Check Coverage
+        run: |
+          $cov = (Invoke-Pester ./S3SkuCopy/Copy-SkuFolders.Tests.ps1 -PassThru).CodeCoverage
+          if ($cov.PercentLine -lt 95) { Write-Error "Coverage <95%"; exit 1 }
+      - name: Release
+        if: github.ref == 'refs/heads/main'
+        run: echo "Release step (sign, tag, publish)"
